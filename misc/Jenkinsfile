@@ -12,7 +12,7 @@ node {   // can be run on ANY Jenkins processing node
      }
    }
    stage('docker build/push') {
-     docker.withRegistry('https://index.docker.io/v1/', 'dockezbyszekm/minimal-nodejs-apprhub') {  // using credentials store under dockerhub id credentials manager
+     docker.withRegistry('https://index.docker.io/v1/', 'dockerhub') {  // using credentials store under dockerhub id credentials manager
        def app = docker.build("zbyszekm/minimal-nodejs-app:${commit_id}", '.').push() //second argument is the path for Dockerfile
      }
    }
