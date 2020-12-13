@@ -6,7 +6,7 @@ node {   // can be run on ANY Jenkins processing node
      commit_id = readFile('.git/commit-id').trim()  // trim() gets rid of spaces and similar
    }
    stage('test') {
-     nodejs(nodeJSInstallationName: 'nodejs') {
+     nodejs(nodeJSInstallationName: 'ZMNodeJS15-3-0') {
        sh 'npm install --only=dev'  // zainstaluje dev time dependencies zadeklarowane w package.json (-> mocha)
        sh 'npm test'
      }
