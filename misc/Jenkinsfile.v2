@@ -1,3 +1,6 @@
+// ten Jenkinsfile jest dla przypadku, gdy nie uzywane są narzędzie skonfigurowane w Jenkinsie specyficzne dla poszczególnych rodzajów projektu
+// w tym przypadku mamy tu dedykowane kontenery zawierające npm, bazę danych 
+
 node {
    def commit_id
    stage('Preparation') {
@@ -5,16 +8,18 @@ node {
      sh "git rev-parse --short HEAD > .git/commit-id"
      commit_id = readFile('.git/commit-id').trim()
    }
+   // do tego punktu identycznie jak w przypadku poprzednim, a ten przypadek jest zdefinowany wyżej
+   
    stage('test') {
      def myTestContainer = docker.image('node:4.6')
-     myTestContainer.pull()
+     myTestContainer.pull() // wymuś zciągnięcie tego image'u, nawet jeśli cached
      myTestContainer.inside {
        sh 'npm install --only=dev'
        sh 'npm test'
      }
    }
    stage('test with a DB') {
-     def mysql = docker.image('mysql').run("-e MYSQL_ALLOW_EMPTY_PASSWORD=yes") 
+     def mysql = docker.image('mysql').run("-e MYSQL_ALLOW_EMPTY_PASSWORD=yes") // -e ustawia zmienną środ.
      def myTestContainer = docker.image('node:4.6')
      myTestContainer.pull()
      myTestContainer.inside("--link ${mysql.id}:mysql") { // using linking, mysql will be available at host: mysql, port: 3306
@@ -22,7 +27,9 @@ node {
           sh 'npm test'                     
      }                                   
      mysql.stop()
-   }                                     
+   }         
+   
+   // od tego miejsca identycznie jak w przypadku poprzednim
    stage('docker build/push') {            
      docker.withRegistry('https://index.docker.io/v1/', 'dockerhub') {
        def app = docker.build("wardviaene/docker-nodejs-demo:${commit_id}", '.').push()
