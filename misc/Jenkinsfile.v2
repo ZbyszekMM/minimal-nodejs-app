@@ -1,5 +1,6 @@
-// ten Jenkinsfile jest dla przypadku, gdy nie uzywane są narzędzie skonfigurowane w Jenkinsie specyficzne dla poszczególnych rodzajów projektu
-// w tym przypadku mamy tu dedykowane kontenery zawierające npm, bazę danych 
+// ten Jenkinsfile jest dla przypadku, gdy NIE uzywane są narzędzie skonfigurowane w Jenkinsie specyficzne dla poszczególnych rodzajów projektu
+// w tym przypadku mamy tu dedykowane kontenery zawierające npm, bazę danych. Daje to pełną swobodę w używaniu narzędzi buodwania
+// TO JEST SCRIPTED PIPELINE w odróżnieniu od declarative pipeline
 
 node {
    def commit_id
